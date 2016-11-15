@@ -1,3 +1,11 @@
+User stories on Trello:
+https://trello.com/b/zDm6nTSF/game-project
+
+Wireframe on Moqup:
+https://app.moqups.com/briandridge@gmail.com/h8bKf252Uc/edit/page/a8a95ef16
+
+
+
 # ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Project #1: The Game
 
 ### Overview
