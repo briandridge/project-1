@@ -1,3 +1,9 @@
+Asteroids game
+
+Player can move left, right, and fire a blaster to destroy an asteroid in given time limit.
+2 players take turns.
+Player with fastest time wins.
+
 User stories on Trello:
 https://trello.com/b/zDm6nTSF/game-project
 
