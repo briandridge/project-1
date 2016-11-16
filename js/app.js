@@ -12,6 +12,8 @@ var shipY = canvas.height-30;
 var rightPressed = false;
 var leftPressed = false;
 var spacePressed = false;
+var blasterTotal = 2;
+var blasters = [];
 
 document.addEventListener("keydown", function(event) {
 	if (event.keyCode == 39) {
@@ -29,54 +31,56 @@ document.addEventListener("keyup", function(event) {
 	else if (event.keyCode == 37) {
 		leftPressed = false;
 	}
-	else if (event.keyCode == 32) {
+	else if (event.keyCode == 32 && blasters.length <= blasterTotal) {
 		spacePressed = true;
+		blasters.push([shipX, shipY, blasterRadius, 0, Math.PI*2]);
 	}
 });
 
 var drawBlaster = function() {
-	ctx.beginPath();
-	ctx.arc(shipX, y, blasterRadius, 0, Math.PI*2);
-	ctx.fillStyle = "red";
-	ctx.fill();
-	ctx.closePath();
+	if (blasters.length)
+	for (var i = 0; i < blasters.length; i++) {
+		ctx.beginPath();
+		// ctx.arc(x, y, blasterRadius, 0, Math.PI*2);
+		ctx.arc(blasters[i][0],blasters[i][1],blasters[i][2],blasters[i][3], blasters[i][4]);
+		ctx.fillStyle = "red";
+		ctx.fill();
+		ctx.closePath();
+	}
+	// console.log(blasters);
 };
 
 var drawShip = function() {
-	ctx.beginPath();
-	ctx.rect(shipX, canvas.height-(shipHeight*2), shipWidth, shipHeight);
-	ctx.fillStyle = "black";
-	ctx.fill();
-	ctx.closePath();
-};
-
-var draw = function() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	drawShip();
 	if (rightPressed && shipX < canvas.width-shipWidth) {
 		shipX += 3;
 	}
 	else if (leftPressed && shipX > 0) {
 		shipX -= 3;
 	}
-	// if (spacePressed) {
-	// 	drawBlaster();
-	// }
+	ctx.beginPath();
+	ctx.rect(shipX, canvas.height-(shipHeight*2), shipWidth, shipHeight);
+	ctx.fillStyle = "black";
+	ctx.fill();
+	ctx.closePath(); 
 };
 
-var fireBlaster = function(){
-	if (spacePressed) {
-		drawBlaster();
-		y += dy;
-		console.log("fireBlaster");
-		console.log(y);
-	}
+var clearGalaxy =function(){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
+var initiateGame = function(){
+	setInterval(infiniteSpaceLoop, 10);
+};
 
-window.setInterval(function(){
-	draw();
-	fireBlaster();
-	}, 10);
+var infiniteSpaceLoop = function() {
+	clearGalaxy();
+	drawShip();
+	// moveShip();
+	drawBlaster();
+	// moveBlaster();
+
+};
+
+window.onload = initiateGame;
 
 
