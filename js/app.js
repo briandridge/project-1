@@ -9,9 +9,7 @@ var dy = -4
 var blasterRadius = 10;
 var shipWidth = 50;
 var shipHeight = 50;
-
-var shipX = (canvas.width-shipWidth)/2
-
+var shipX = (canvas.width-shipWidth)/2;
 var rightPressed = false;
 var leftPressed = false;
 
@@ -40,3 +38,24 @@ var draw = function() {
 };
 
 setInterval(draw, 10);
+
+document.addEventListener("keydown", keyDownListener, false);
+document.addEventListener("keyup", keyUpListener, false);
+
+var keyDownListener = function(page) {
+	if (page.keyCode == 39) {
+		rightPressed = true;
+	}	
+	else if (page.keyCode == 38) {
+		leftPressed = true;
+	}
+};
+
+var keyUpListener = function(page) {
+	if (page.keyCode == 39) {
+		rightPressed = false;
+	}
+	else if (page.keyCode == 38) {
+		leftPressed = false;
+	}
+};
