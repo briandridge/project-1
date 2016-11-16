@@ -15,6 +15,8 @@ var spacePressed = false;
 var blasterTotal = 2;
 var blasters = [];
 
+// listens for r/l arrow keys, changes state to true, right/leftPressed variables used in drawShip function
+// use keydown so can hold down to hold down to repeat
 document.addEventListener("keydown", function(event) {
 	if (event.keyCode == 39) {
 		rightPressed = true;
@@ -24,6 +26,11 @@ document.addEventListener("keydown", function(event) {
 	}
 });
 
+// listens to keyup, changes state back to false
+// resets right/leftPressed variables to false state
+// use keyup so it stops on lift up
+
+// also pushes a blaster with current ship x/y coordinates to blasters array so drawBlasters function know when or if to draw
 document.addEventListener("keyup", function(event) {
 	if (event.keyCode == 39) {
 		rightPressed = false;
@@ -33,10 +40,11 @@ document.addEventListener("keyup", function(event) {
 	}
 	else if (event.keyCode == 32 && blasters.length <= blasterTotal) {
 		spacePressed = true;
-		blasters.push([shipX, shipY, blasterRadius, 0, Math.PI*2]);
+		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
 	}
 });
 
+// draws blaster, pushes to blasters array
 var drawBlaster = function() {
 	if (blasters.length)
 	for (var i = 0; i < blasters.length; i++) {
@@ -64,23 +72,37 @@ var drawShip = function() {
 	ctx.closePath(); 
 };
 
+var moveBlaster = function() {
+	for (var i = 0; i < blasters.length; i++) {
+		if (blasters[i][1]>0) {
+			blasters[i][1] += -4;
+		}
+		else if (blasters[i][1]<0) {
+			blasters.splice(i,1);
+		}
+	}
+
+};
+
+// erases every thing in the galaxy every interval
 var clearGalaxy =function(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
+// the game loop - calls all functions every interval
+var infiniteSpaceLoop = function() {
+	clearGalaxy();
+	drawShip();
+	drawBlaster();
+	moveBlaster();
+};
+
+// sets an interval for the game loop function so it calls every 10 milliseconds
 var initiateGame = function(){
 	setInterval(infiniteSpaceLoop, 10);
 };
 
-var infiniteSpaceLoop = function() {
-	clearGalaxy();
-	drawShip();
-	// moveShip();
-	drawBlaster();
-	// moveBlaster();
-
-};
-
+// prime mover - calls initiateGame function on window load
 window.onload = initiateGame;
 
 
