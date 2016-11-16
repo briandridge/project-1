@@ -2,7 +2,9 @@
 
 * {
 	box-sizing: border-box;
-	border: 1px solid black;
+	/*border: 1px solid black;*/
+	font-family: 'Space Mono', monospace;
+
 }
 
 /*@media*/
@@ -10,9 +12,26 @@
 
 /*---------- Base Styles ----------*/
 
+canvas {
+	background-color: grey;
+}
 
+.bodyDiv {
+	text-align: center;
+}
 
+h1 {
+	margin: 250px auto 0px;/*make responsive*/
+}
 
+footer {
+	margin-top: 250px; /*make responsive*/
+}
+
+.footerLink {
+	float: left;
+	padding: 10px;
+}
 
 
 /*---------- Layout ----------*/
