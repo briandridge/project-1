@@ -56,10 +56,11 @@ document.addEventListener("keyup", function(event){
 		spacePressed = false;
 		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
 	}
-	else if (event.keyCode == 32 && junk.length <= junkTotal) {
-		spacePressed = false;
-		junk.push([shipX, junkY, junkWidth, junkHeight]);
-	}
+	// else if (event.keyCode == 32 && junk.length <= junkTotal) {
+	// 	spacePressed = false;
+	// 	junk.push([shipX, junkY, junkWidth, junkHeight]);
+	// 	// console.log('hello' + junk);
+	// }
 });
 
 var drawShip = function(){
@@ -101,28 +102,41 @@ var moveBlaster = function(){
 
 };
 
+var drawAsteroid = function(){
+	ctx.beginPath();
+	ctx.rect((canvas.width-shipWidth)/2, 300, 100, 100);
+	ctx.fillStyle = "white";
+	ctx.fill();
+	ctx.closePath(); 
+};
+
+
+
+// var generateJunk = function(){
+// 	setInterval(drawJunk, 3000);
+// };
+
 // using same method as blaster, draws some space junk
-var drawJunk = function(){
-	for (var i = 0; i < junk.length; i++) {
-		ctx.beginPath();
-		ctx.rect(junk[i][0],junk[i][1],junk[i][2],junk[i][3]);
-		ctx.fillStyle = "white";
-		ctx.fill();
-		ctx.closePath();			
-	}
-};
+// var drawJunk = function(){
+// 	for (var i = 0; i < junk.length; i++) {
+// 		ctx.beginPath();
+// 		ctx.rect(junk[i][0],junk[i][1],junk[i][2],junk[i][3]);
+// 		ctx.fillStyle = "white";
+// 		ctx.fill();
+// 		ctx.closePath();			
+// 	}
+// };
 
-var moveJunk = function(){
-	for (var i = 0; i < junk.length; i++) {
-		if (junk[i][1]<0) {
-			junk[i][1] -= 4;
-		}
-		else if (junk[i][1]>canvas.height) {
-			junk.splice(i,1);
-		}
-	}
-
-};
+// var moveJunk = function(){
+// 	for (var i = 0; i < junk.length; i++) {
+// 		if (junk[i][1]<0) {
+// 			junk[i][1] -= -4;
+// 		}
+// 		else if (junk[i][1]>canvas.height) {
+// 			junk.splice(i,1);
+// 		}
+// 	}
+// };
 
 // erases every thing in the 'verse every interval
 var clearGalaxy =function(){
@@ -135,9 +149,10 @@ var infiniteSpaceLoop = function(){
 	drawShip();
 	drawBlaster();
 	moveBlaster();
-	// drawAsteroid();
-	drawJunk();
+	// generateJunk();
+	// drawJunk();
 	// moveJunk();
+	drawAsteroid();
 };
 
 // sets an interval for the game loop function so it calls every 10 milliseconds

@@ -12,6 +12,11 @@
 
 /*---------- Base Styles ----------*/
 
+.container {
+	margin: 0px auto;
+	float: left;
+}
+
 canvas {
 	background-color: grey;
 }
@@ -30,7 +35,7 @@ footer {
 
 .footerLink {
 	float: left;
-	padding: 10px;
+	padding: 30px;
 }
 
 
