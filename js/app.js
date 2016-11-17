@@ -20,7 +20,10 @@ var spacePressed = false;
 var blasterTotal = 4;
 var blasters = [];
 
-var junkY = -1;
+var asteroidWidth = 75;
+var asteroidHeight = 75;
+
+var junkY = 30;
 var junkWidth = 25;
 var junkHeight = 25;
 var junkTotal = 10;
@@ -56,13 +59,13 @@ document.addEventListener("keyup", function(event){
 		spacePressed = false;
 		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
 	}
-	// else if (event.keyCode == 32 && junk.length <= junkTotal) {
-	// 	spacePressed = false;
-	// 	junk.push([shipX, junkY, junkWidth, junkHeight]);
-	// 	// console.log('hello' + junk);
-	// }
+	else if (event.keyCode == 32 && junk.length <= junkTotal) {
+		spacePressed = false;
+		junk.push([shipX, junkY, junkWidth, junkHeight]);
+		// console.log('hello' + junk);
+	}
 });
-
+   
 var drawShip = function(){
 	if (rightPressed && shipX < canvas.width-shipWidth) {
 		shipX += 3;
@@ -90,6 +93,7 @@ var drawBlaster = function(){
 };
 
 // goes through blasters array, if the y coordinates of [i] are on the canvas, changes y to =+4
+// if not, splices the blaster out of the array to get rid of it
 var moveBlaster = function(){
 	for (var i = 0; i < blasters.length; i++) {
 		if (blasters[i][1]>0) {
@@ -102,13 +106,14 @@ var moveBlaster = function(){
 
 };
 
-var drawAsteroid = function(){
-	ctx.beginPath();
-	ctx.rect((canvas.width-shipWidth)/2, 300, 100, 100);
-	ctx.fillStyle = "white";
-	ctx.fill();
-	ctx.closePath(); 
-};
+// var drawAsteroid = function(){
+// 	ctx.beginPath();
+// 	ctx.rect((canvas.width-asteroidWidth)/2, 50, asteroidWidth, asteroidHeight);
+// 	ctx.fillStyle = "white";
+// 	ctx.fill();
+// 	ctx.closePath();
+
+// };
 
 
 
@@ -117,26 +122,26 @@ var drawAsteroid = function(){
 // };
 
 // using same method as blaster, draws some space junk
-// var drawJunk = function(){
-// 	for (var i = 0; i < junk.length; i++) {
-// 		ctx.beginPath();
-// 		ctx.rect(junk[i][0],junk[i][1],junk[i][2],junk[i][3]);
-// 		ctx.fillStyle = "white";
-// 		ctx.fill();
-// 		ctx.closePath();			
-// 	}
-// };
+var drawJunk = function(){
+	for (var i = 0; i < junk.length; i++) {
+		ctx.beginPath();
+		ctx.rect(junk[i][0],junk[i][1],junk[i][2],junk[i][3]);
+		ctx.fillStyle = "white";
+		ctx.fill();
+		ctx.closePath();			
+	}
+};
 
-// var moveJunk = function(){
-// 	for (var i = 0; i < junk.length; i++) {
-// 		if (junk[i][1]<0) {
-// 			junk[i][1] -= -4;
-// 		}
-// 		else if (junk[i][1]>canvas.height) {
-// 			junk.splice(i,1);
-// 		}
-// 	}
-// };
+var moveJunk = function(){
+	for (var i = 0; i < junk.length; i++) {
+		if (junk[i][1]>0) {
+			junk[i][1] -= -2;
+		}
+		else if (junk[i][1]>canvas.height) {
+			junk.splice(i,1);
+		}
+	}
+};
 
 // erases every thing in the 'verse every interval
 var clearGalaxy =function(){
@@ -150,9 +155,9 @@ var infiniteSpaceLoop = function(){
 	drawBlaster();
 	moveBlaster();
 	// generateJunk();
-	// drawJunk();
-	// moveJunk();
-	drawAsteroid();
+	drawJunk();
+	moveJunk();
+	// drawAsteroid();
 };
 
 // sets an interval for the game loop function so it calls every 10 milliseconds
