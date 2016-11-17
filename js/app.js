@@ -38,8 +38,10 @@ document.addEventListener("keydown", function(event){
 	else if (event.keyCode == 37) {
 		leftPressed = true;
 	}
-	else if (event.keyCode ==32) {
+	else if (event.keyCode == 32 && blasters.length <= blasterTotal || junk.length <= junkTotal) {
 		spacePressed = true;
+		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
+		junk.push([shipX, junkY, junkWidth, junkHeight]);
 	}
 });
 
@@ -55,15 +57,14 @@ document.addEventListener("keyup", function(event){
 	else if (event.keyCode == 37) {
 		leftPressed = false;
 	}
-	else if (event.keyCode == 32 && blasters.length <= blasterTotal) {
+	else if (event.keyCode == 32) {
 		spacePressed = false;
-		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
 	}
-	else if (event.keyCode == 32 && junk.length <= junkTotal) {
-		spacePressed = false;
-		junk.push([shipX, junkY, junkWidth, junkHeight]);
-		// console.log('hello' + junk);
-	}
+	// // else if (event.keyCode == 32 && junk.length <= junkTotal) {
+	// // 	// spacePressed = false;
+	// // 	junk.push([shipX, junkY, junkWidth, junkHeight]);
+	// // 	console.log('hello' + junk);
+	// }
 });
    
 var drawShip = function(){
@@ -137,7 +138,7 @@ var moveJunk = function(){
 		if (junk[i][1]>0) {
 			junk[i][1] -= -2;
 		}
-		else if (junk[i][1]>canvas.height) {
+		else if (junk[i][1]<canvas.height) {
 			junk.splice(i,1);
 		}
 	}
