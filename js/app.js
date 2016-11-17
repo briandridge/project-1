@@ -1,28 +1,42 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-var x = canvas.width/2;
-var y = canvas.height-30;
-var dx = 2;
-var dy = -4;
+
+// var x = canvas.width/2;
+// var y = canvas.height-30;
+// var dx = 2;
+// var dy = -4;
+
 var blasterRadius = 10;
+
 var shipWidth = 50;
 var shipHeight = 50;
 var shipX = (canvas.width-shipWidth)/2;
 var shipY = canvas.height-30;
+
 var rightPressed = false;
 var leftPressed = false;
 var spacePressed = false;
-var blasterTotal = 2;
+
+var blasterTotal = 4;
 var blasters = [];
+
+var junkY = -1;
+var junkWidth = 25;
+var junkHeight = 25;
+var junkTotal = 10;
+var junk = [];
 
 // listens for r/l arrow keys, changes state to true, right/leftPressed variables used in drawShip function
 // use keydown so can hold down to hold down to repeat
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function(event){
 	if (event.keyCode == 39) {
 		rightPressed = true;
 	}	
 	else if (event.keyCode == 37) {
 		leftPressed = true;
+	}
+	else if (event.keyCode ==32) {
+		spacePressed = true;
 	}
 });
 
@@ -31,7 +45,7 @@ document.addEventListener("keydown", function(event) {
 // use keyup so it stops on lift up
 
 // also pushes a blaster with current ship x/y coordinates to blasters array so drawBlasters function know when or if to draw
-document.addEventListener("keyup", function(event) {
+document.addEventListener("keyup", function(event){
 	if (event.keyCode == 39) {
 		rightPressed = false;
 	}
@@ -39,26 +53,16 @@ document.addEventListener("keyup", function(event) {
 		leftPressed = false;
 	}
 	else if (event.keyCode == 32 && blasters.length <= blasterTotal) {
-		spacePressed = true;
+		spacePressed = false;
 		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
+	}
+	else if (event.keyCode == 32 && junk.length <= junkTotal) {
+		spacePressed = false;
+		junk.push([shipX, junkY, junkWidth, junkHeight]);
 	}
 });
 
-// draws blaster, pushes to blasters array
-var drawBlaster = function() {
-	if (blasters.length)
-	for (var i = 0; i < blasters.length; i++) {
-		ctx.beginPath();
-		// ctx.arc(x, y, blasterRadius, 0, Math.PI*2);
-		ctx.arc(blasters[i][0],blasters[i][1],blasters[i][2],blasters[i][3], blasters[i][4]);
-		ctx.fillStyle = "red";
-		ctx.fill();
-		ctx.closePath();
-	}
-	// console.log(blasters);
-};
-
-var drawShip = function() {
+var drawShip = function(){
 	if (rightPressed && shipX < canvas.width-shipWidth) {
 		shipX += 3;
 	}
@@ -72,7 +76,20 @@ var drawShip = function() {
 	ctx.closePath(); 
 };
 
-var moveBlaster = function() {
+// draws blasters that are in the blasters array
+var drawBlaster = function(){
+	// if (blasters.length)
+	for (var i = 0; i < blasters.length; i++) {
+		ctx.beginPath();
+		ctx.arc(blasters[i][0],blasters[i][1],blasters[i][2],blasters[i][3], blasters[i][4]);
+		ctx.fillStyle = "red";
+		ctx.fill();
+		ctx.closePath();
+	}
+};
+
+// goes through blasters array, if the y coordinates of [i] are on the canvas, changes y to =+4
+var moveBlaster = function(){
 	for (var i = 0; i < blasters.length; i++) {
 		if (blasters[i][1]>0) {
 			blasters[i][1] += -4;
@@ -84,17 +101,43 @@ var moveBlaster = function() {
 
 };
 
-// erases every thing in the galaxy every interval
+// using same method as blaster, draws some space junk
+var drawJunk = function(){
+	for (var i = 0; i < junk.length; i++) {
+		ctx.beginPath();
+		ctx.rect(junk[i][0],junk[i][1],junk[i][2],junk[i][3]);
+		ctx.fillStyle = "white";
+		ctx.fill();
+		ctx.closePath();			
+	}
+};
+
+var moveJunk = function(){
+	for (var i = 0; i < junk.length; i++) {
+		if (junk[i][1]<0) {
+			junk[i][1] -= 4;
+		}
+		else if (junk[i][1]>canvas.height) {
+			junk.splice(i,1);
+		}
+	}
+
+};
+
+// erases every thing in the 'verse every interval
 var clearGalaxy =function(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
 // the game loop - calls all functions every interval
-var infiniteSpaceLoop = function() {
+var infiniteSpaceLoop = function(){
 	clearGalaxy();
 	drawShip();
 	drawBlaster();
 	moveBlaster();
+	// drawAsteroid();
+	drawJunk();
+	// moveJunk();
 };
 
 // sets an interval for the game loop function so it calls every 10 milliseconds
