@@ -25,8 +25,10 @@ var junkHeight = 25;
 var junkTotal = 10;
 var junk = [];
 
+var score = 0;
 var score1 = 0;
 var score2 = 0;
+var turnOver = false;
 
 var asteroidHeight = canvas.height-(shipHeight*2);
 
@@ -39,7 +41,7 @@ document.addEventListener("keydown", function(event){
 	else if (event.keyCode == 37) {
 		leftPressed = true;
 	}
-	else if (event.keyCode == 32 && blasters.length <= blasterTotal || junk.length <= junkTotal) {
+	else if (event.keyCode == 32 && (blasters.length <= blasterTotal) || (junk.length <= junkTotal)) {
 		spacePressed = true;
 		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
 		junk.push([shipX, junkY, junkWidth, junkHeight]);
@@ -122,6 +124,7 @@ var drawJunk = function(){
 	}
 };
 
+// couldn't get random angle to work
 // var randomJunkX = function(){
 // 	var rando = Math.floor(Math.random() * 13) - 6;
 // 	return rando;
@@ -169,7 +172,6 @@ var bounceJunk = function(){
 var spliceJunk = function(){
 	for (var i = 0; i < junk.length; i++) {
 		if (junk[i][1] >= canvas.height) {
-			console.log(junk[i]);
 			junk.splice(i,1);
 			console.log("spliced junk"+ junk);
 		}
@@ -194,14 +196,13 @@ var goodAim = function(){
 
 					remove = true;
 					junk.splice(ii,1);
-					score1 ++;
-					console.log(score1);
+					score ++;
+					console.log(score);
 				}
 				if (remove === true) {
 				blasters.splice(i,1);
 				remove = false;
 			}
-				
 		}
 	}
 };
@@ -209,19 +210,43 @@ var goodAim = function(){
 // if junk and ship x/y values line up
 var starFoxDown = function(){
 	for (var i = 0; i < junk.length; i++) {
-			if ((junk[i][1] >= shipY - shipHeight) && (junk[i][0] >= shipX) && (junk[i][0] <= shipX + shipWidth)){
+			if ((junk[i][1] - junkHeight === shipY) && (junk[i][0] >= shipX) && (junk[i][0] <= shipX + shipWidth)){
 			 // is higher than or touching ships y plus height) && (junk's x is greater than ships x) && (junks x + width is less than ships x + width) {}	
 			console.log("Star Fox is down!");
+			turnOver = true;
 		}
 	}
 };
 
-var keepScore = function(){
-	if (score1 === 10) {
-		// alert("Player 1 score: 10. Player 2 click button to begin.");
-		// make button to reset game for p2
+var modal = document.getElementById('turnOver');
+var goButton = document.getElementsByClassName("startTurnTwoButton")[0];
+var message = document.getElementById("turnOverText");
+
+var fireModal = function(){
+	if ((score === 10) || (turnOver === true)) {
+		modal.style.display = "block";
+		message.innerHTML = "Player 1 score: " + score;
+		goButton.innerHTML = "Initiate Player 2 launch sequence";
+		score1 = score;
+		console.log("var score =" + score);
+		console.log("var score1 =" + score1);
 	}
+	else if ((score === 20) || (turnOver === true)) {
+		modal.style.display = "block";
+		message.innerHTML = "Player 1 score: " + score1 <br> "Player 2 score: " + score;
+		goButton.innerHTML = "Play again";
+		score = 0;
+		score1 = 0;
+		console.log("var score =" + score);
+		console.log("var score1 =" + score1);
+	}	
 };
+
+goButton.addEventListener("click", function(){
+	modal.style.display = "none";
+
+	// startTurnTwo(); need to make this function still
+});
 
 // erases every thing in the 'verse every interval
 var clearGalaxy =function(){
@@ -240,9 +265,8 @@ var infiniteSpaceLoop = function(){
 	bounceJunk();
 	goodAim();
 	starFoxDown();
-	keepScore();
-	// drawAsteroid();
 	spliceJunk();
+	fireModal();
 };
 
 var generateRandom = function(){

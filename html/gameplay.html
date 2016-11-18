@@ -12,13 +12,24 @@
     </style> -->
 </head>
 <body>
-	<canvas id="myCanvas" width="375" height="677"></canvas>
-	<!-- NEED TO MAKE SIZE RESPONSIVE -->
-	<!-- http://stackoverflow.com/questions/25754848/what-are-the-device-width-css-viewport-sizes-of-the-iphone6-and-iphone-6-plus
+	<div class="container">
+		<canvas id="myCanvas" width="375" height="677"></canvas>
+		<!-- NEED TO MAKE SIZE RESPONSIVE -->
+		<!-- http://stackoverflow.com/questions/25754848/what-are-the-device-width-css-viewport-sizes-of-the-iphone6-and-iphone-6-plus
 
-	http://stackoverflow.com/questions/23445907/jquery-to-make-html5-canvas-responsive -->
+		http://stackoverflow.com/questions/23445907/jquery-to-make-html5-canvas-responsive -->
 
+		<div id="turnOver" class="modal">
+			<div class="modalContent">
+				<span id="startTurnTwo" class="startTurnTwoButton">Go!</span>
+				<p id="turnOverText"></p>
+			</div>
+		</div>
+
+		<!-- <div id="gameOver" class="modal"></div> -->
+	</div>
 
 <script src="../js/app.js"></script>
+<script src="../js/modal.js"></script>
 </body>
 </html>
