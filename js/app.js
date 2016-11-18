@@ -4,8 +4,6 @@ var ctx = canvas.getContext("2d");
 // var x = canvas.width/2;
 // var y = canvas.height-30;
 
-var whichPlayer;
-
 var shipWidth = 50;
 var shipHeight = 50;
 var shipX = (canvas.width-shipWidth)/2;
@@ -32,7 +30,10 @@ var score1 = false;
 var score2 = false;
 var turnOver = false;
 
-var asteroidHeight = canvas.height-(shipHeight*2);
+var PlayerOneTurn;
+var PlayerTwoTurn;
+
+// var asteroidHeight = canvas.height-(shipHeight*2);
 
 // listens for r/l arrow keys, changes state to true, right/leftPressed variables used in drawShip function
 // use keydown so can hold down to hold down to repeat
@@ -221,63 +222,71 @@ var starFoxDown = function(){
 };
 
 var sModal = document.getElementById('startModal');
-var tModal = document.getElementById('turnModal');
-var gModal = document.getElementById('gameOverModal');
+// var tModal = document.getElementById('turnModal');
+// var gModal = document.getElementById('gameOverModal');
 var sButton = document.getElementById("startButton");
 var message = document.getElementById("startText");
 
+
+
+// on window load, or depending on values of score vars, tells user where we are.
 var fireModal = function(){
-	console.log("fire!");
-	console.log(score1);
 	if (score1 === false) {
 		sModal.style.display = "block";
 		message.innerHTML = "Welcome";
 		sButton.innerHTML = "Click to Initiate Player 1 launch sequence";
-		console.log("var score =" + counter);
-		console.log("var score1 =" + score1);
-		console.log("var score1 =" + score2);
+		// console.log("var score =" + counter);
+		// console.log("var score1 =" + score1);
+		// console.log("var score1 =" + score2);
+		PlayerOneTurn = true;
+		PlayerTwoTurn = false;
 	}
 	else if ((counter === 10) || (turnOver === true)) {
-		score2 = counter;
+		// score2 = counter;
 		clearInterval(infiniteSpaceLoop);
 		sModal.style.display = "block";
-		message.innerHTML = "Player 2 score: " + score1 <br> "Player 2 score: " + counter;
-		sButton.innerHTML = "Play again";
-		console.log("var score =" + score);
-		console.log("var score1 =" + score1);
+		message.innerHTML = "Player 1 score: " + score1;
+		sButton.innerHTML = "Initiate Player 2 Launch Sequence";
+		// console.log("var score =" + score);
+		// console.log("var score1 =" + score1);
+		PlayerOneTurn = false;
+		PlayerTwoTurn = true;
 	}
 	else if (score1 && score2) {
 		clearInterval(infiniteSpaceLoop);
-		gModal.style.display = "block";
+		sModal.style.display = "block";
 		message.innerHTML = "Player 1 score: " + score1 <br> "Player 2 score: " + score2;
 		sButton.innerHTML = "Initiate Player 2 launch sequence";
-		console.log("var score =" + counter);
-		console.log("var score1 =" + score1);
-		console.log("var score1 =" + score2);
+		// console.log("var score =" + counter);
+		// console.log("var score1 =" + score1);
+		// console.log("var score1 =" + score2);
+		PlayerOneTurn = false;
+		PlayerTwoTurn = false;
 	}	
 };
 
+
+// click listener on link on modal. on click resets score vars and initiates game loop.
 document.getElementById("startButton").addEventListener("click", function() {
 
 // sButton.addEventListener("click", function(){
-	if (score1 === false) {
+	if (PlayerOneTurn) {
 		sModal.style.display = "none";
 		score1 = counter;
 		counter = 0;
-		initiateGame();
 	}
-	else if (score1) {
+	else if (PlayerTwoTurn) {
 		sModal.style.display = "none";
 		score2 = counter;
-		initiateGame();
+		counter = 0;
 	}
-	else if (score2) {
+	else if ((PlayerOneTurn === false) && (PlayerTwoTurn === false)) {
 		sModal.style.display = "none";
 		score1 = 0;
 		score2 = 0;
 		counter = 0;
-		initiateGame();
 	}
+	initiateGame();
 });
 
 // erases every thing in the 'verse every interval
@@ -310,7 +319,7 @@ var initiateGame = function(){
 	setInterval(infiniteSpaceLoop, 10);
 };
 
-// prime mover - calls initiateGame function on window load
+// calls fireModal function on window load
 window.onload = fireModal;
 
 

@@ -76,7 +76,7 @@ footer {
 }
 
 /* The Close Button */
-.startTurnTwoButton {
+.button {
     color: #aaaaaa;
     /*float: right;*/
     font-size: 28px;
@@ -84,8 +84,8 @@ footer {
 
 }
 
-.startTurnTwoButton:hover,
-.startTurnTwoButton:focus {
+.button:hover,
+.button:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
