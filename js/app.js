@@ -4,6 +4,8 @@ var ctx = canvas.getContext("2d");
 // var x = canvas.width/2;
 // var y = canvas.height-30;
 
+var whichPlayer;
+
 var shipWidth = 50;
 var shipHeight = 50;
 var shipX = (canvas.width-shipWidth)/2;
@@ -25,9 +27,9 @@ var junkHeight = 25;
 var junkTotal = 10;
 var junk = [];
 
-var score = 0;
-var score1 = 0;
-var score2 = 0;
+var counter = false;
+var score1 = false;
+var score2 = false;
 var turnOver = false;
 
 var asteroidHeight = canvas.height-(shipHeight*2);
@@ -196,8 +198,8 @@ var goodAim = function(){
 
 					remove = true;
 					junk.splice(ii,1);
-					score ++;
-					console.log(score);
+					counter ++;
+					console.log(counter);
 				}
 				if (remove === true) {
 				blasters.splice(i,1);
@@ -218,34 +220,64 @@ var starFoxDown = function(){
 	}
 };
 
-var modal = document.getElementById('turnOver');
-var goButton = document.getElementsByClassName("startTurnTwoButton")[0];
-var message = document.getElementById("turnOverText");
+var sModal = document.getElementById('startModal');
+var tModal = document.getElementById('turnModal');
+var gModal = document.getElementById('gameOverModal');
+var sButton = document.getElementById("startButton");
+var message = document.getElementById("startText");
 
 var fireModal = function(){
-	if ((score === 10) || (turnOver === true)) {
-		modal.style.display = "block";
-		message.innerHTML = "Player 1 score: " + score;
-		goButton.innerHTML = "Initiate Player 2 launch sequence";
-		score1 = score;
+	console.log("fire!");
+	console.log(score1);
+	if (score1 === false) {
+		sModal.style.display = "block";
+		message.innerHTML = "Welcome";
+		sButton.innerHTML = "Click to Initiate Player 1 launch sequence";
+		console.log("var score =" + counter);
+		console.log("var score1 =" + score1);
+		console.log("var score1 =" + score2);
+	}
+	else if ((counter === 10) || (turnOver === true)) {
+		score2 = counter;
+		clearInterval(infiniteSpaceLoop);
+		sModal.style.display = "block";
+		message.innerHTML = "Player 2 score: " + score1 <br> "Player 2 score: " + counter;
+		sButton.innerHTML = "Play again";
 		console.log("var score =" + score);
 		console.log("var score1 =" + score1);
 	}
-	else if ((score === 20) || (turnOver === true)) {
-		modal.style.display = "block";
-		message.innerHTML = "Player 1 score: " + score1 <br> "Player 2 score: " + score;
-		goButton.innerHTML = "Play again";
-		score = 0;
-		score1 = 0;
-		console.log("var score =" + score);
+	else if (score1 && score2) {
+		clearInterval(infiniteSpaceLoop);
+		gModal.style.display = "block";
+		message.innerHTML = "Player 1 score: " + score1 <br> "Player 2 score: " + score2;
+		sButton.innerHTML = "Initiate Player 2 launch sequence";
+		console.log("var score =" + counter);
 		console.log("var score1 =" + score1);
+		console.log("var score1 =" + score2);
 	}	
 };
 
-goButton.addEventListener("click", function(){
-	modal.style.display = "none";
+document.getElementById("startButton").addEventListener("click", function() {
 
-	// startTurnTwo(); need to make this function still
+// sButton.addEventListener("click", function(){
+	if (score1 === false) {
+		sModal.style.display = "none";
+		score1 = counter;
+		counter = 0;
+		initiateGame();
+	}
+	else if (score1) {
+		sModal.style.display = "none";
+		score2 = counter;
+		initiateGame();
+	}
+	else if (score2) {
+		sModal.style.display = "none";
+		score1 = 0;
+		score2 = 0;
+		counter = 0;
+		initiateGame();
+	}
 });
 
 // erases every thing in the 'verse every interval
@@ -269,9 +301,9 @@ var infiniteSpaceLoop = function(){
 	fireModal();
 };
 
-var generateRandom = function(){
-	setInterval(makeARandom, 10);
-};
+// var generateRandom = function(){
+// 	setInterval(makeARandom, 10);
+// };
 
 // sets an interval for the game loop function so it calls every 10 milliseconds
 var initiateGame = function(){
@@ -279,6 +311,6 @@ var initiateGame = function(){
 };
 
 // prime mover - calls initiateGame function on window load
-window.onload = initiateGame;
+window.onload = fireModal;
 
 

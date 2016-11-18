@@ -19,14 +19,31 @@
 
 		http://stackoverflow.com/questions/23445907/jquery-to-make-html5-canvas-responsive -->
 
-		<div id="turnOver" class="modal">
+
+		<!-- Start Game Modal -->
+		<div id="startModal" class="modal">
 			<div class="modalContent">
-				<span id="startTurnTwo" class="startTurnTwoButton">Go!</span>
-				<p id="turnOverText"></p>
+				<span id="startButton" class="button"></span>
+				<p id="startText"></p>
 			</div>
 		</div>
 
-		<!-- <div id="gameOver" class="modal"></div> -->
+		<!-- Player 1 turn over Modal -->
+		<div id="turnModal" class="modal">
+			<div class="modalContent">
+				<span id="turnTwo" class="button"></span>
+				<p id="turnTwoText"></p>
+			</div>
+		</div>
+
+		<!-- Player 2 game over Modal -->
+		<div id="gameOverModal" class="modal">
+			<div class="modalContent">
+				<span id="resetButton" class="button"></span>
+				<p id="resetText"></p>
+			</div>
+		</div>
+
 	</div>
 
 <script src="../js/app.js"></script>
