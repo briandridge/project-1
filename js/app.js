@@ -14,11 +14,11 @@ var leftPressed = false;
 var spacePressed = false;
 
 var blasterRadius = 10;
-var blasterTotal = 4;
+var blasterTotal = 10;
 var blasters = [];
 
 // var randomJunkX;
-var junkXRate = 2;
+var junkXRate = 1;
 var junkY = 30;
 var junkWidth = 25;
 var junkHeight = 25;
@@ -27,6 +27,8 @@ var junk = [];
 
 var score1 = 0;
 var score2 = 0;
+
+var asteroidHeight = canvas.height-(shipHeight*2);
 
 // listens for r/l arrow keys, changes state to true, right/leftPressed variables used in drawShip function
 // use keydown so can hold down to hold down to repeat
@@ -75,6 +77,14 @@ var drawShip = function(){
 	ctx.closePath(); 
 };
 
+// var drawAsteroid = function(){
+// 	ctx.beginPath();
+// 	ctx.rect(1, asteroidHeight, 400, 10);
+// 	ctx.fillStyle = "black";
+// 	ctx.fill();
+// 	ctx.closePath(); 
+// };
+
 // draws blasters that are in the blasters array
 var drawBlaster = function(){
 	// if (blasters.length)
@@ -91,11 +101,12 @@ var drawBlaster = function(){
 // if not, splices the blaster out of the array to get rid of it
 var moveBlaster = function(){
 	for (var i = 0; i < blasters.length; i++) {
-		if (blasters[i][1]>0) {
+		if (blasters[i][1] > 0) {
 			blasters[i][1] += -4;
 		}
-		else if (blasters[i][1]<0) {
+		else if (blasters[i][1] < 1) {
 			blasters.splice(i,1);
+			console.log(blasters+ "spliced blaster");
 		}
 	}
 };
@@ -117,16 +128,27 @@ var drawJunk = function(){
 // 	console.log("it ran");
 // };
 
-// for all existing junk, iterate their y values down the canvas, iterate their x value by junkYRate(defined in bounceJunk()), and splice them from the array if they go off the canvas
+// for all existing junk, ++ their y values down the canvas, ++ their x value by junkXRate (defined in bounceJunk()), and splice them from the array if they go off the canvas
 var moveJunk = function(){
 	for (var i = 0; i < junk.length; i++) {
-		if (junk[i][1]>0) {
+		if (junk[i][1] > 10) {
 			junk[i][1] -= -2;
 			junk[i][0] += junkXRate;
 		}
-		else if (junk[i][1]>canvas.height) {
+		// else if (junk[i][1] >= asteroidHeight) {
+		// 	console.log(junk[i]);
+		// 	junk.splice(i,1);
+		// 	console.log("spliced junk"+ junk);
+		// }
+	}
+};
+
+var spliceJunk = function(){
+	for (var i = 0; i < junk.length; i++) {
+		if (junk[i][1] >= canvas.height) {
+			console.log(junk[i]);
 			junk.splice(i,1);
-			console.log("spliced!");
+			console.log("spliced junk"+ junk);
 		}
 	}
 };
@@ -136,39 +158,40 @@ var moveJunk = function(){
 var bounceJunk = function(){
 	for (var i = junk.length - 1; i >= 0; i--) {
 		if (junk[i][0] > canvas.width - junkWidth) {
-		junkXRate = -2;
+		junkXRate = -4;
 		}
-		else if (junk[i][0] < 0) {
-			junkXRate = 2;
+		else if (junk[i][0] > 677) {
+			junkXRate = 4;
 		}
 	}
 };
 
 // if blaster and junk x/y values line up
-var goodAim = function(){
-	var remove = false;
-	for (var i = 0; i < blasters.length; i++) {
-		for (var ii = 0; ii < junk.length; ii++) {
-				 if (blasters[i][1] <= (junk[ii][1] + junk[ii][3]) && blasters[i][0] >= junk[ii][0] && blasters[i][0] <= (junk[ii][0] + junk[ii][2])){
-				 	// if (blasterY <= junkY + junkHeight) && (blasterX >= junkX) && (blasterX <= junkX + junkWidth)
-				 	// if (blaster is lower than or touching junk's leading edge) && (blasterX left border is equal or right of JunkX's left border...) && (...blasterX left border is to the left of JunkX's right border)
+// var goodAim = function(){
+// 	var remove = false;
+// 	for (var i = 0; i < blasters.length; i++) {
+// 		for (var ii = 0; ii < junk.length; ii++) {
+// 				 if (blasters[i][1] <= (junk[ii][1] + junk[ii][3]) && blasters[i][0] >= junk[ii][0] && blasters[i][0] <= (junk[ii][0] + junk[ii][2])){
+// 				 	// if (blasterY <= junkY + junkHeight) && (blasterX >= junkX) && (blasterX <= junkX + junkWidth)
+// 				 	// if (blaster is lower than or touching junk's leading edge) && (blasterX left border is equal or right of JunkX's left border...) && (...blasterX left border is to the left of JunkX's right border)
 
-					// blaster and junk arrays for reference:
-					// blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
-					// junk.push([shipX, junkY, junkWidth, junkHeight]);
-					remove = true;
-					junk.splice(ii,1);
-					score1 ++;
-					console.log(score1);
-				}
-				if (remove === true) {
-				blasters.splice(i,1);
-				remove = false;
-			}
+// 					// blaster and junk arrays for reference:
+// 					// blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
+// 					// junk.push([shipX, junkY, junkWidth, junkHeight]);
+
+// 					remove = true;
+// 					junk.splice(ii,1);
+// 					score1 ++;
+// 					console.log(score1);
+// 				}
+// 				if (remove === true) {
+// 				blasters.splice(i,1);
+// 				remove = false;
+// 			}
 				
-		}
-	}
-};
+// 		}
+// 	}
+// };
 
 // if junk and ship x/y values line up
 // var starFoxDown = function(){
@@ -202,9 +225,11 @@ var infiniteSpaceLoop = function(){
 	drawJunk();
 	moveJunk();
 	bounceJunk();
-	goodAim();
+	// goodAim();
 	// starFoxDown();
 	keepScore();
+	// drawAsteroid();
+	spliceJunk();
 };
 
 var generateRandom = function(){
