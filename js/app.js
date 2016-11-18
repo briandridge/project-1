@@ -188,8 +188,8 @@ var spliceJunk = function(){
 var goodAim = function(){
 	var remove = false;
 	for (var i = 0; i < blasters.length; i++) {
-		for (var ii = 0; ii < junk.length; ii++) {
-				 if (blasters[i][1] <= (junk[ii][1] + junk[ii][3]) && blasters[i][0] >= junk[ii][0] && blasters[i][0] <= (junk[ii][0] + junk[ii][2])){
+		for (var f = 0; f < junk.length; f++) {
+				 if (blasters[i][1] <= (junk[f][1] + junk[f][3]) && blasters[i][0] >= junk[f][0] && blasters[i][0] <= (junk[f][0] + junk[f][2])){
 				 	// if (blasterY <= junkY + junkHeight) && (blasterX >= junkX) && (blasterX <= junkX + junkWidth)
 				 	// if (blaster is lower than or touching junk's leading edge) && (blasterX left border is equal or right of JunkX's left border...) && (...blasterX left border is to the left of JunkX's right border)
 
@@ -198,9 +198,9 @@ var goodAim = function(){
 					// junk.push([shipX, junkY, junkWidth, junkHeight]);
 
 					remove = true;
-					junk.splice(ii,1);
+					junk.splice(f,1);
 					counter ++;
-					console.log(counter);
+					console.log("goodAim: counter = " + counter);
 				}
 				if (remove === true) {
 				blasters.splice(i,1);
@@ -231,7 +231,8 @@ var message = document.getElementById("startText");
 
 // on window load, or depending on values of score vars, tells user where we are.
 var fireModal = function(){
-	if (score1 === false) {
+	if (PlayerOneTurn) {
+		score1 = counter;
 		sModal.style.display = "block";
 		message.innerHTML = "Welcome";
 		sButton.innerHTML = "Click to Initiate Player 1 launch sequence";
@@ -241,39 +242,41 @@ var fireModal = function(){
 		PlayerOneTurn = true;
 		PlayerTwoTurn = false;
 	}
-	else if ((counter === 10) || (turnOver === true)) {
-		// score2 = counter;
+	else if ((score1 === 10) || (turnOver === true)) {
+		score1 = counter;
 		clearInterval(infiniteSpaceLoop);
 		sModal.style.display = "block";
 		message.innerHTML = "Player 1 score: " + score1;
 		sButton.innerHTML = "Initiate Player 2 Launch Sequence";
-		// console.log("var score =" + score);
-		// console.log("var score1 =" + score1);
+		console.log("fireModal: counter =" + counter);
+		console.log("fireModal: score1 =" + score1);
+		console.log("fireModal: score2 =" + score2);
 		PlayerOneTurn = false;
 		PlayerTwoTurn = true;
 	}
 	else if (score1 && score2) {
+		score2 = counter;
 		clearInterval(infiniteSpaceLoop);
 		sModal.style.display = "block";
 		message.innerHTML = "Player 1 score: " + score1 <br> "Player 2 score: " + score2;
 		sButton.innerHTML = "Initiate Player 2 launch sequence";
-		// console.log("var score =" + counter);
-		// console.log("var score1 =" + score1);
-		// console.log("var score1 =" + score2);
+		console.log("fireModal: counter =" + counter);
+		console.log("fireModal: score1 =" + score1);
+		console.log("fireModal: score2 =" + score2);
 		PlayerOneTurn = false;
 		PlayerTwoTurn = false;
 	}	
 };
 
 
-// click listener on link on modal. on click resets score vars and initiates game loop.
+// click listener on span in the modal. on click resets score vars and initiates game loop.
 document.getElementById("startButton").addEventListener("click", function() {
 
 // sButton.addEventListener("click", function(){
 	if (PlayerOneTurn) {
 		sModal.style.display = "none";
 		score1 = counter;
-		counter = 0;
+		// counter = 0;
 	}
 	else if (PlayerTwoTurn) {
 		sModal.style.display = "none";
@@ -286,7 +289,7 @@ document.getElementById("startButton").addEventListener("click", function() {
 		score2 = 0;
 		counter = 0;
 	}
-	initiateGame();
+	infiniteSpaceLoop();
 });
 
 // erases every thing in the 'verse every interval
@@ -316,10 +319,11 @@ var infiniteSpaceLoop = function(){
 
 // sets an interval for the game loop function so it calls every 10 milliseconds
 var initiateGame = function(){
+	fireModal();
 	setInterval(infiniteSpaceLoop, 10);
 };
 
 // calls fireModal function on window load
-window.onload = fireModal;
+window.onload = initiateGame;
 
 
