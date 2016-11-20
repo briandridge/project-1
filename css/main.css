@@ -52,8 +52,8 @@ footer {
     z-index: 1; /* Sit on top */
     /*padding-top: 100px;  Location of the box */
     /*dtransform: translate(-50%, -80%);*/
-    left: 0;
-    top: 0;
+    left: 0px;
+    top: 0px;
     width: 100%;
     height: 100%;
     overflow: auto; /* Enable scroll if needed */
@@ -66,10 +66,10 @@ footer {
 /* Modal Content */
 .modalContent {
     background-color: #fefefe;
-    margin: auto;
+    margin: 200px auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 60%;
 }
 
 #turnOverText {
