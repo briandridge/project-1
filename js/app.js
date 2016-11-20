@@ -25,13 +25,14 @@ var junkHeight = 25;
 var junkTotal = 10;
 var junk = [];
 
-var counter = false;
-var score1 = false;
-var score2 = false;
+var counter = 0;
+var score1 = counter;
+var score2 = 0;
 var turnOver = false;
 
-var PlayerOneTurn;
-var PlayerTwoTurn;
+var beginGame = true;
+var playerOneTurn = false;
+var playerTwoTurn = false;
 
 // var asteroidHeight = canvas.height-(shipHeight*2);
 
@@ -231,40 +232,32 @@ var message = document.getElementById("startText");
 
 // on window load, or depending on values of score vars, tells user where we are.
 var fireModal = function(){
-	if (PlayerOneTurn) {
-		score1 = counter;
-		sModal.style.display = "block";
+	if (beginGame) {
+		// score1 = counter;
+		sModal.style.display = "inline-block";
 		message.innerHTML = "Welcome";
 		sButton.innerHTML = "Click to Initiate Player 1 launch sequence";
-		// console.log("var score =" + counter);
-		// console.log("var score1 =" + score1);
-		// console.log("var score1 =" + score2);
-		PlayerOneTurn = true;
-		PlayerTwoTurn = false;
+		console.log("beginGame true ? " + beginGame);
 	}
-	else if ((score1 === 10) || (turnOver === true)) {
-		score1 = counter;
+	else if (playerOneTurn && ((score1 === 10) || (turnOver === true))) {
+		// score1 = counter;
 		clearInterval(infiniteSpaceLoop);
-		sModal.style.display = "block";
+		sModal.style.display = "inline-block";
 		message.innerHTML = "Player 1 score: " + score1;
 		sButton.innerHTML = "Initiate Player 2 Launch Sequence";
-		console.log("fireModal: counter =" + counter);
-		console.log("fireModal: score1 =" + score1);
-		console.log("fireModal: score2 =" + score2);
-		PlayerOneTurn = false;
-		PlayerTwoTurn = true;
+		console.log("playerTwoTurn true ? " + playerOneTurn);
+		// PlayerOneTurn = false;
+		// PlayerTwoTurn = true;
 	}
-	else if (score1 && score2) {
-		score2 = counter;
+	else if (playerTwoTurn && (score2 === 10 || turnOver === true)) {
+		// score2 = counter;
 		clearInterval(infiniteSpaceLoop);
-		sModal.style.display = "block";
-		message.innerHTML = "Player 1 score: " + score1 <br> "Player 2 score: " + score2;
-		sButton.innerHTML = "Initiate Player 2 launch sequence";
-		console.log("fireModal: counter =" + counter);
-		console.log("fireModal: score1 =" + score1);
-		console.log("fireModal: score2 =" + score2);
-		PlayerOneTurn = false;
-		PlayerTwoTurn = false;
+		sModal.style.display = "inline-block";
+		message.innerHTML = "Player 1 score: " + score1 + "<br>Player 2 score: " + score2;
+		sButton.innerHTML = "Play again?";
+		console.log("beginGame true ? " + beginGame);
+		// PlayerOneTurn = false;
+		// PlayerTwoTurn = false;
 	}	
 };
 
@@ -273,18 +266,32 @@ var fireModal = function(){
 document.getElementById("startButton").addEventListener("click", function() {
 
 // sButton.addEventListener("click", function(){
-	if (PlayerOneTurn) {
+	if (beginGame) {
 		sModal.style.display = "none";
-		score1 = counter;
-		// counter = 0;
-	}
-	else if (PlayerTwoTurn) {
-		sModal.style.display = "none";
-		score2 = counter;
+		beginGame = false;
+		playerOneTurn = true;
+		playerTwoTurn = false;
 		counter = 0;
+		score1 = counter;
+		console.log("beginGame false ? " + beginGame);
+		console.log("playerOneTurn true ? " + playerOneTurn);
+		console.log("playerTwoTurn false ? " + playerTwoTurn);
+		console.log("counter  = 0 ? " + counter);
+		console.log("score1 = counter ? " + score1);
 	}
-	else if ((PlayerOneTurn === false) && (PlayerTwoTurn === false)) {
+	else if (playerOneTurn) {
 		sModal.style.display = "none";
+		beginGame = false;
+		playerOneTurn = false;
+		playerTwoTurn = true;
+		counter = 0;
+		score2 = counter;
+	}
+	else if (playerTwoTurn) {
+		sModal.style.display = "none";
+		beginGame = true;
+		playerOneTurn = false;
+		playerTwoTurn = false;
 		score1 = 0;
 		score2 = 0;
 		counter = 0;
@@ -317,13 +324,13 @@ var infiniteSpaceLoop = function(){
 // 	setInterval(makeARandom, 10);
 // };
 
-// sets an interval for the game loop function so it calls every 10 milliseconds
+// sets an interval for the game loop function so it calls every 10 milliseconds, and calls the modal
 var initiateGame = function(){
 	fireModal();
 	setInterval(infiniteSpaceLoop, 10);
 };
 
-// calls fireModal function on window load
+// calls initiateGame function on window load
 window.onload = initiateGame;
 
 
