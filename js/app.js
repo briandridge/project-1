@@ -19,7 +19,7 @@ var blasterTotal = 10;
 var blasters = [];
 
 // var randomJunkX;
-var junkXRate = 2;
+var junkXRate = 2.5;
 var junkY = 30;
 var junkWidth = 25;
 var junkHeight = 25;
@@ -46,12 +46,14 @@ document.addEventListener("keydown", function(event){
 	else if (event.keyCode == 37) {
 		leftPressed = true;
 	}
-	else if (event.keyCode == 32 && (blasters.length <= blasterTotal) || (junk.length <= junkTotal)) {
+	else if (event.keyCode == 32 && (blasters.length <= blasterTotal)) {
 		spacePressed = true;
 		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
 		// junk.push([shipX, junkY, junkWidth, junkHeight]);
 	}
 });
+
+ // || (junk.length <= junkTotal)
 
 // listens to keyup, changes state back to false
 // resets right/leftPressed variables to false state
@@ -118,11 +120,19 @@ var moveBlaster = function(){
 	}
 };
 
+var junkInterval = setInterval(makeJunk, 500);
+
 var makeJunk = function (){
 	if (junk.length <= junkTotal) {
 	junk.push([shipX, junkY, junkWidth, junkHeight]);
 	} 
 };
+
+var stopJunk = function(){
+	clearInterval(makeJunk);
+};
+
+
 
 // using same method as blaster, draws some space junk
 var drawJunk = function(){
@@ -167,10 +177,12 @@ var moveJunk = function(){
 var bounceJunk = function(){
 	for (var i = junk.length - 1; i >= 0; i--) {
 		if (junk[i][0] > canvas.width - junkWidth) {
-		junkXRate = -2;
+			// junk[i][0] -= junkXRate;
+			junkXRate = -2;
 		}
 		else if (junk[i][0] <= 0) {
-			junkXRate = 2;
+			// junk[i][0] += 2;
+			 junkXRate = 2;
 		}
 	}
 };
@@ -213,7 +225,7 @@ var goodAim = function(){
 // if junk and ship x/y values line up
 var starFoxDown = function(){
 	for (var i = 0; i < junk.length; i++) {
-			if ((junk[i][1] >= 597) && ((junk[i][0] >= shipX) && (junk[i][0] <= shipX + shipWidth))){
+			if ((junk[i][1] + junkHeight >= 597) && ((junk[i][0] >= shipX) && (junk[i][0] <= shipX + shipWidth))){
 			 // is higher than or touching ships y plus height) && (junk's x is greater than ships x) && (junks x + width is less than ships x + width) {}	
 			console.log("Star Fox is down!");
 			turnOver = true;
@@ -221,19 +233,14 @@ var starFoxDown = function(){
 	}
 };
 
- // + junkHeight
-
 var sModal = document.getElementById('startModal');
 var sButton = document.getElementById("startButton");
 var message = document.getElementById("startText");
 
-	// setInterval(makeJunk, 500);
-
-
 // on window load, or depending on values of score vars, tells user where we are.
 var fireModal = function(){
 	if (beginGame) {
-		clearInterval(infiniteSpaceLoop);
+		clearInterval(stopTime);
 		clearInterval(makeJunk);
 		sModal.style.display = "inline-block";
 		message.innerHTML = "Welcome. <br>Try to blast away all the space junk.<br><br> Move L/R with arrows.<br><br>Fire blaster with space bar (because we're in space).<br><br>First to ten wins, don't get hit by the space junk :/";
@@ -282,7 +289,8 @@ document.getElementById("startButton").addEventListener("click", function() {
 		counter = 0;
 		score1 = counter;
 		infiniteSpaceLoop();
-		setInterval(makeJunk, 500);
+		makeJunk();
+		// setInterval(makeJunk, 500);
 	}
 	else if (playerOneTurn) {
 		sModal.style.display = "none";
@@ -304,6 +312,7 @@ document.getElementById("startButton").addEventListener("click", function() {
 		score1 = 0;
 		score2 = 0;
 		counter = 0;
+		stopJunk();
 	}
 });
 
@@ -327,14 +336,19 @@ var infiniteSpaceLoop = function(){
 	fireModal();
 };
 
+var stopTime = function(){
+	clearInterval(stopTime);
+};
+
 // var generateRandom = function(){
 // 	setInterval(makeARandom, 10);
 // };
 
 // sets an interval for the game loop function so it calls every 10 milliseconds, and calls the modal
 var initiateGame = function(){
+	var stopTime = setInterval(infiniteSpaceLoop, 10);
+	// setInterval(makeJunk, 500);
 	fireModal();
-	setInterval(infiniteSpaceLoop, 10);
 };
 
 // calls initiateGame function on window load
