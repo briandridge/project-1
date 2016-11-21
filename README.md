@@ -1,14 +1,28 @@
-Asteroids game
+Space invader game
 
-Player can move left, right, and fire a blaster to destroy an asteroid in given time limit.
+Player can move left, right, and fire a blaster to destroy space junk.
 2 players take turns.
-Player with fastest time wins.
+A turn ends if player is hit by space junk, or hits ten junk with the blaster.
+Player with highest score wins.
 
 User stories on Trello:
 https://trello.com/b/zDm6nTSF/game-project
 
-Wireframe on Moqup:
-https://app.moqups.com/briandridge@gmail.com/h8bKf252Uc/edit/page/a8a95ef16
+Wireframe image attached.
+
+I decided to use canvas for this project because it is the new hottness and I was intrigued and wanted a challenge.  Also because I was scared of trying to do this purely with JS DOM manipulation.
+
+I used these two tutorials heavily to guide me:
+
+http://atomicrobotdesign.com/blog/htmlcss/build-a-vertical-scrolling-shooter-game-with-html5-canvas-part-1/
+
+https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript
+
+THe learning curve with canvas was pretty fast, and the biggest challenges were with the JS.  Specifically, defining the different stages of game play (new game, player 1's turn, player 2's turn), setting and clearing intervals for the game loop and junk making functions. The biggest canvas challenge was defining a collision.
+
+I would like to refactor to be object oriented. Making the junk and blasters elements in an array gave me troubles with acting on a single blaster or junk.
+
+
 
 
 
