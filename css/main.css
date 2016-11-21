@@ -30,9 +30,18 @@ h1 {
 	margin: 250px auto 0px;/*make responsive*/
 }
 
-footer {
-	margin-top: 250px; /*make responsive*/
+a {
+	text-decoration: none;
+	color: black;
 }
+
+a:hover {
+	color: gray;
+}
+
+/*footer {
+	margin-top: 250px; /*make responsive*/
+/*}*/*/
 
 .footerLink {
 	float: left;
