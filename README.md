@@ -1,5 +1,8 @@
 Space invader game:
 
+Link to game on the web:
+https://briandridge.github.io/project-1/
+
 Player can move left, right, and fire a blaster to destroy space junk.
 2 players take turns.
 A turn ends if player is hit by space junk, or hits ten junk with the blaster.
