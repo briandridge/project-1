@@ -8,7 +8,8 @@ var shipWidth = 50;
 var shipHeight = 50;
 var shipX = (canvas.width-shipWidth)/2;
 var shipY = 647;
-// var shipImg = url(../assets/shipImg.png);
+shipImg = new Image();
+shipImg.src = '../assets/ship.png';
 
 var rightPressed = false;
 var leftPressed = false;
@@ -17,6 +18,8 @@ var spacePressed = false;
 var blasterRadius = 10;
 var blasterTotal = 10;
 var blasters = [];
+blasterImg = new Image();
+blasterImg.src = '../assets/blaster.png';
 
 // var randomJunkX;
 var junkXRate = 2.5;
@@ -25,6 +28,8 @@ var junkWidth = 25;
 var junkHeight = 25;
 var junkTotal = 10;
 var junk = [];
+junkImg = new Image();
+junkImg.src = '../assets/junk.png';
 
 var counter = 0;
 var score1 = counter;
@@ -71,7 +76,7 @@ document.addEventListener("keyup", function(event){
 		spacePressed = false;
 	}
 });
-   
+
 var drawShip = function(){
 	if (rightPressed && shipX < canvas.width-shipWidth) {
 		shipX += 3;
@@ -80,6 +85,7 @@ var drawShip = function(){
 		shipX -= 3;
 	}
 	ctx.beginPath();
+	// ctx.drawImage(shipImg, shipX, canvas.height-(shipHeight*2));
 	ctx.rect(shipX, canvas.height-(shipHeight*2), shipWidth, shipHeight);
 	ctx.fillStyle = "white";
 	ctx.fill();
@@ -100,7 +106,7 @@ var drawBlaster = function(){
 	for (var i = 0; i < blasters.length; i++) {
 		ctx.beginPath();
 		ctx.arc(blasters[i][0],blasters[i][1],blasters[i][2],blasters[i][3], blasters[i][4]);
-		ctx.fillStyle = "red";
+		ctx.fillStyle = "#B20000";
 		ctx.fill();
 		ctx.closePath();
 	}
@@ -132,12 +138,11 @@ var stopJunk = function(){
 	clearInterval(makeJunk);
 };
 
-
-
 // using same method as blaster, draws some space junk
 var drawJunk = function(){
 	for (var i = 0; i < junk.length; i++) {
 		ctx.beginPath();
+		// ctx.drawImage(junkImg, junk[i][0],junk[i][1]);
 		ctx.rect(junk[i][0],junk[i][1],junk[i][2],junk[i][3]);
 		ctx.fillStyle = "white";
 		ctx.fill();
