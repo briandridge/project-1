@@ -1,4 +1,4 @@
-Space invader game
+Space invader game:
 
 Player can move left, right, and fire a blaster to destroy space junk.
 2 players take turns.
@@ -10,17 +10,33 @@ https://trello.com/b/zDm6nTSF/game-project
 
 Wireframe image attached.
 
+Technology:
 I decided to use canvas for this project because it is the new hottness and I was intrigued and wanted a challenge.  Also because I was scared of trying to do this purely with JS DOM manipulation.
 
-I used these two tutorials heavily to guide me:
+Sources:
+I primarily used (copied) these two tutorials to guide me:
 
 http://atomicrobotdesign.com/blog/htmlcss/build-a-vertical-scrolling-shooter-game-with-html5-canvas-part-1/
 
 https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript
 
+And also used these:
+
+http://www.w3schools.com/graphics/canvas_intro.asp
+
+https://gamedevelopment.tutsplus.com/tutorials/create-a-simple-space-shooter-game-in-html5-with-easeljs--active-10944
+
+http://blog.sklambert.com/html5-canvas-game-the-player-ship/
+
+
+Challenges:
 THe learning curve with canvas was pretty fast, and the biggest challenges were with the JS.  Specifically, defining the different stages of game play (new game, player 1's turn, player 2's turn), setting and clearing intervals for the game loop and junk making functions. The biggest canvas challenge was defining a collision.
 
+
+Next steps:
 I would like to refactor to be object oriented. Making the junk and blasters elements in an array gave me troubles with acting on a single blaster or junk.
+
+Would like to make game play more fun by tweaking speeds and angles of elements, changing the win state to be more fun/challenging, and adding more complexity to the info in the modal to alert if you've been hit.
 
 
 
