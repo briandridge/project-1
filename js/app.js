@@ -7,7 +7,8 @@ var ctx = canvas.getContext("2d");
 var shipWidth = 50;
 var shipHeight = 50;
 var shipX = (canvas.width-shipWidth)/2;
-var shipY = canvas.height-30;
+var shipY = 647;
+// var shipImg = url(../assets/shipImg.png);
 
 var rightPressed = false;
 var leftPressed = false;
@@ -48,7 +49,7 @@ document.addEventListener("keydown", function(event){
 	else if (event.keyCode == 32 && (blasters.length <= blasterTotal) || (junk.length <= junkTotal)) {
 		spacePressed = true;
 		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
-		junk.push([shipX, junkY, junkWidth, junkHeight]);
+		// junk.push([shipX, junkY, junkWidth, junkHeight]);
 	}
 });
 
@@ -78,7 +79,7 @@ var drawShip = function(){
 	}
 	ctx.beginPath();
 	ctx.rect(shipX, canvas.height-(shipHeight*2), shipWidth, shipHeight);
-	ctx.fillStyle = "black";
+	ctx.fillStyle = "white";
 	ctx.fill();
 	ctx.closePath(); 
 };
@@ -115,6 +116,12 @@ var moveBlaster = function(){
 			console.log(blasters+ "spliced blaster");
 		}
 	}
+};
+
+var makeJunk = function (){
+	if (junk.length <= junkTotal) {
+	junk.push([shipX, junkY, junkWidth, junkHeight]);
+	} 
 };
 
 // using same method as blaster, draws some space junk
@@ -182,10 +189,7 @@ var spliceJunk = function(){
 	}
 };
 
-
-
-
-// if blaster and junk x/y values line up
+// remove blaster and junk if their x/y values line up
 var goodAim = function(){
 	var remove = false;
 	for (var i = 0; i < blasters.length; i++) {
@@ -214,7 +218,7 @@ var goodAim = function(){
 // if junk and ship x/y values line up
 var starFoxDown = function(){
 	for (var i = 0; i < junk.length; i++) {
-			if ((junk[i][1] - junkHeight === shipY) && (junk[i][0] >= shipX) && (junk[i][0] <= shipX + shipWidth)){
+			if ((junk[i][1] + junkHeight >= 647) && (junk[i][0] >= shipX) && (junk[i][0] <= shipX + shipWidth)){
 			 // is higher than or touching ships y plus height) && (junk's x is greater than ships x) && (junks x + width is less than ships x + width) {}	
 			console.log("Star Fox is down!");
 			turnOver = true;
@@ -228,44 +232,53 @@ var sModal = document.getElementById('startModal');
 var sButton = document.getElementById("startButton");
 var message = document.getElementById("startText");
 
-
-
 // on window load, or depending on values of score vars, tells user where we are.
 var fireModal = function(){
 	if (beginGame) {
+		clearInterval(infiniteSpaceLoop);
+		clearInterval(makeJunk);
 		// score1 = counter;
 		sModal.style.display = "inline-block";
-		message.innerHTML = "Welcome";
-		sButton.innerHTML = "Click to Initiate Player 1 launch sequence";
+		message.innerHTML = "Welcome. <br>Try to blast away all the space junk.<br><br> Move L/R with arrows.<br><br>Fire blaster with space bar (because we're in space).<br><br>First to ten wins, don't get hit by the space junk :/";
+		sButton.innerHTML = "Initiate<br>Player 1<br>Launch Sequence";
 		console.log("beginGame true ? " + beginGame);
 	}
-	else if (playerOneTurn && ((score1 === 10) || (turnOver === true))) {
-		// score1 = counter;
+	else if (playerOneTurn && ((counter === 10) || (turnOver === true))) {
+		score1 = counter;
 		clearInterval(infiniteSpaceLoop);
+		clearInterval(makeJunk);
 		sModal.style.display = "inline-block";
 		message.innerHTML = "Player 1 score: " + score1;
-		sButton.innerHTML = "Initiate Player 2 Launch Sequence";
+		sButton.innerHTML = "Initiate<br>Player 2<br>Launch Sequence";
+		blasters = [];
+		junk = [];
 		console.log("playerTwoTurn true ? " + playerOneTurn);
 		// PlayerOneTurn = false;
 		// PlayerTwoTurn = true;
 	}
-	else if (playerTwoTurn && (score2 === 10 || turnOver === true)) {
-		// score2 = counter;
+	else if (playerTwoTurn && (counter === 10 || turnOver === true)) {
+		score2 = counter;
 		clearInterval(infiniteSpaceLoop);
+		clearInterval(makeJunk);
 		sModal.style.display = "inline-block";
-		message.innerHTML = "Player 1 score: " + score1 + "<br>Player 2 score: " + score2;
+			if (score1 > score2) {
+				message.innerHTML = "The force is strong with you, young Padawan.<br><br>Player 1 wins!<br><br>Player 1 score: " + score1 + "<br>Player 2 score: " + score2;
+			}
+			else if (score2 > score1) {
+				message.innerHTML = "The force is strong with you, young Padawan.<br><br>Player 2 wins!<br>Player 1 score: " + score1 + "<br>Player 2 score: " + score2;
+			}
+			else if (score1 === score2) {
+				message.innerHTML = "I guess you both are pretty good at blasting space junk.<br><br>Player 1 score: " + score1 + "<br>Player 2 score: " + score2;
+			}
 		sButton.innerHTML = "Play again?";
 		console.log("beginGame true ? " + beginGame);
-		// PlayerOneTurn = false;
-		// PlayerTwoTurn = false;
+		blasters = [];
+		junk = [];
 	}	
 };
 
-
 // click listener on span in the modal. on click resets score vars and initiates game loop.
 document.getElementById("startButton").addEventListener("click", function() {
-
-// sButton.addEventListener("click", function(){
 	if (beginGame) {
 		sModal.style.display = "none";
 		beginGame = false;
@@ -273,17 +286,13 @@ document.getElementById("startButton").addEventListener("click", function() {
 		playerTwoTurn = false;
 		counter = 0;
 		score1 = counter;
-		console.log("beginGame false ? " + beginGame);
-		console.log("playerOneTurn true ? " + playerOneTurn);
-		console.log("playerTwoTurn false ? " + playerTwoTurn);
-		console.log("counter  = 0 ? " + counter);
-		console.log("score1 = counter ? " + score1);
 	}
 	else if (playerOneTurn) {
 		sModal.style.display = "none";
 		beginGame = false;
 		playerOneTurn = false;
 		playerTwoTurn = true;
+		turnOver = false;
 		counter = 0;
 		score2 = counter;
 	}
@@ -292,11 +301,13 @@ document.getElementById("startButton").addEventListener("click", function() {
 		beginGame = true;
 		playerOneTurn = false;
 		playerTwoTurn = false;
+		turnOver = false;
 		score1 = 0;
 		score2 = 0;
 		counter = 0;
 	}
 	infiniteSpaceLoop();
+	makeJunk();
 });
 
 // erases every thing in the 'verse every interval
@@ -312,7 +323,6 @@ var infiniteSpaceLoop = function(){
 	moveBlaster();
 	drawJunk();
 	moveJunk();
-	// moveJunkX();
 	bounceJunk();
 	goodAim();
 	starFoxDown();
@@ -323,6 +333,9 @@ var infiniteSpaceLoop = function(){
 // var generateRandom = function(){
 // 	setInterval(makeARandom, 10);
 // };
+
+setInterval(makeJunk, 500);
+
 
 // sets an interval for the game loop function so it calls every 10 milliseconds, and calls the modal
 var initiateGame = function(){

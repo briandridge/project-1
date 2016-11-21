@@ -20,7 +20,8 @@
 }
 
 canvas {
-	background-color: grey;
+	background: url(../assets/background.jpg) repeat;
+	/*background-color: grey;*/
 	margin: 0px auto;
 	/*float: left;*/
 }
@@ -66,7 +67,7 @@ footer {
 /* Modal Content */
 .modalContent {
     background-color: #fefefe;
-    margin: 200px auto;
+    margin: 130px auto;
     padding: 20px;
     border: 1px solid #888;
     width: 60%;
