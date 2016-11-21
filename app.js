@@ -1,15 +1,12 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
-// var x = canvas.width/2;
-// var y = canvas.height-30;
-
 var shipWidth = 50;
 var shipHeight = 50;
 var shipX = (canvas.width-shipWidth)/2;
 var shipY = 647;
-shipImg = new Image();
-shipImg.src = '../assets/ship.png';
+// shipImg = new Image();
+// shipImg.src = '../assets/ship.png';
 
 var rightPressed = false;
 var leftPressed = false;
@@ -51,8 +48,12 @@ var stopJunkInterval = function(){
 	clearInterval(setJunkInterval);
 };
 
+var sModal = document.getElementById('startModal');
+var sButton = document.getElementById("startButton");
+var message = document.getElementById("startText");
+
 // listens for r/l arrow keys, changes state to true, right/leftPressed variables used in drawShip function
-// use keydown so can hold down to hold down to repeat
+// use keydown so can hold down to repeat
 document.addEventListener("keydown", function(event){
 	if (event.keyCode == 39) {
 		rightPressed = true;
@@ -63,7 +64,6 @@ document.addEventListener("keydown", function(event){
 	else if (event.keyCode == 32 && (blasters.length <= blasterTotal)) {
 		spacePressed = true;
 		blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
-		// junk.push([shipX, junkY, junkWidth, junkHeight]);
 	}
 });
 
@@ -86,6 +86,7 @@ document.addEventListener("keyup", function(event){
 	}
 });
 
+// draws ship according to new coordinates from key listeners
 var drawShip = function(){
 	if (rightPressed && shipX < canvas.width-shipWidth) {
 		shipX += 3;
@@ -113,7 +114,7 @@ var drawBlaster = function(){
 	}
 };
 
-// goes through blasters array, if the y coordinates of [i] are on the canvas, changes y to =+4
+// goes through blasters array, if the y coordinates of [i] are on the canvas, changes y to =+ -4
 // if not, splices the blaster out of the array to get rid of it
 var moveBlaster = function(){
 	for (var i = 0; i < blasters.length; i++) {
@@ -127,13 +128,14 @@ var moveBlaster = function(){
 	}
 };
 
+// pushes junk into junk array - called on an interval which is set by clicking the start game link on the modal
 var makeJunk = function (){
 	if (junk.length <= junkTotal) {
 	junk.push([shipX, junkY, junkWidth, junkHeight]);
 	} 
 };
 
-// using same method as blaster, draws some space junk
+// draws space junk from the junk array
 var drawJunk = function(){
 	for (var i = 0; i < junk.length; i++) {
 		ctx.beginPath();
@@ -152,7 +154,7 @@ var drawJunk = function(){
 // 	console.log("it ran");
 // };
 
-// for all existing junk, ++ their y values down the canvas, ++ their x value by junkXRate (defined in bounceJunk()), and splice them from the array if they go off the canvas
+// for all existing junk, ++ their y values down the canvas, ++ their x value by junkXRate (defined in bounceJunk())
 var moveJunk = function(){
 	for (var i = 0; i < junk.length; i++) {
 		if (junk[i][1] > 10) {
@@ -187,6 +189,7 @@ var bounceJunk = function(){
 	}
 };
 
+// splice junk out of array if it's y coordinates are off the canvas
 var spliceJunk = function(){
 	for (var i = 0; i < junk.length; i++) {
 		if (junk[i][1] >= canvas.height) {
@@ -222,7 +225,7 @@ var goodAim = function(){
 	}
 };
 
-// if junk and ship x/y values line up
+// if hit by junk - x/y values line up, game over
 var starFoxDown = function(){
 	for (var i = 0; i < junk.length; i++) {
 			if ((junk[i][1] + junkHeight >= 597) && ((junk[i][0] >= shipX) && (junk[i][0] <= shipX + shipWidth))){
@@ -233,15 +236,9 @@ var starFoxDown = function(){
 	}
 };
 
-var sModal = document.getElementById('startModal');
-var sButton = document.getElementById("startButton");
-var message = document.getElementById("startText");
-
-// on window load, or depending on values of score vars, tells user where we are.
+// on window load, or depending on values of score vars, tells user whose turn, what the score is, and who won.
 var fireModal = function(){
 	if (beginGame) {
-		// clearInterval(setLoopInterval);
-		// clearInterval(setJunkInterval);
 		stopLoopInterval();
 		stopJunkInterval();
 		sModal.style.display = "inline-block";
@@ -249,8 +246,6 @@ var fireModal = function(){
 		sButton.innerHTML = "Initiate<br>Player 1<br>Launch Sequence";
 	}
 	else if (playerOneTurn && ((counter === 10) || (turnOver === true))) {
-		// clearInterval(setLoopInterval);
-		// clearInterval(setJunkInterval);
 		stopLoopInterval();
 		stopJunkInterval();
 		score1 = counter;
@@ -280,7 +275,7 @@ var fireModal = function(){
 	}	
 };
 
-// click listener on span in the modal. on click resets score vars and initiates game loop.
+// click listener on span in the modal. on click resets score vars and initiates game and junk loops.
 document.getElementById("startButton").addEventListener("click", function() {
 	if (beginGame) {
 		sModal.style.display = "none";
@@ -322,7 +317,7 @@ var clearGalaxy =function(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
-// the game loop - calls all functions every interval
+// the game loop - calls all functions every interval (10 milliseconds)
 var infiniteSpaceLoop = function(){
 	clearGalaxy();
 	drawShip();
@@ -337,18 +332,8 @@ var infiniteSpaceLoop = function(){
 	fireModal();
 };
 
-// var stopTime = function(){
-// 	clearInterval(stopTime);
-// };
-
-// var generateRandom = function(){
-// 	setInterval(makeARandom, 10);
-// };
-
-// sets an interval for the game loop function so it calls every 10 milliseconds, and calls the modal
+// calls the modal function
 var initiateGame = function(){
-	// var stopTime = setInterval(infiniteSpaceLoop, 10);
-	// setInterval(makeJunk, 500);
 	fireModal();
 };
 
