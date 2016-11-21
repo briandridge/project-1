@@ -19,15 +19,18 @@
 	float: left;
 }
 
+/*gives canvas star background*/
 canvas {
 	background: url(assets/background.jpg) repeat;
 	margin: 0px auto;
 }
 
+/*Title on landing page*/
 h1 {
 	margin: 250px auto 0px;
 }
 
+/*title link*/
 a {
 	text-decoration: none;
 	color: black;
