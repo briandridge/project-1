@@ -7,8 +7,10 @@
 
 }
 
-/*@media*/
+@media (max-width: 800px) {
 
+    
+}
 
 /*---------- Base Styles and Layout ----------*/
 
@@ -25,20 +27,59 @@ canvas {
 	margin: 0px auto;
 }
 
-/*Title on landing page*/
-h1 {
-	margin: 250px auto 0px;
-}
-
 /*title link*/
+
 a {
 	text-decoration: none;
 	color: black;
 }
 
-a:hover {
-	color: gray;
+/*-------- Landing page link hover effect  --------*/
+
+.cl-effect-6 a {
+    position: fixed;
+    top: 30%;
+    left: 41%;
+    margin: 0% auto;
+    padding: 10px;
 }
+
+.cl-effect-6 a::before {
+    position: fixed;
+    top: 30%;
+    left: 41%;
+    margin: 0% auto;
+    width: 120px;
+    height: 2px;
+    background: #000000;
+    content: '';
+    -webkit-transition: top 0.3s;
+    -moz-transition: top 0.3s;
+    transition: top 0.3s;
+}
+
+.cl-effect-6 a::after {
+    position: fixed;
+    top: 30%;
+    left: 41%;
+    margin: 0% auto;
+    width: 2px;
+    height: 2px;
+    background: #000000;
+    content: '';
+    -webkit-transition: height 0.3s;
+    -moz-transition: height 0.3s;
+    transition: height 0.3s;
+}
+
+.cl-effect-6 a:hover::before {
+    top: 35.5%;
+    opacity: 1;
+}
+
+.cl-effect-6 a:hover::after {
+    height: 5.5%;
+} 
 
 /*---------- Modal ----------*/
 
