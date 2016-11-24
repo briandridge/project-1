@@ -7,10 +7,16 @@
 
 }
 
-@media screen (max-width: 800px) {
+/*@media (max-width: 800px) {
+     .container {
 
-    
-}
+     }
+
+     canvas {
+        /*width: 100%;*/
+  /*      min-width: 375;
+     }   
+}*/
 
 /*---------- Base Styles and Layout ----------*/
 
