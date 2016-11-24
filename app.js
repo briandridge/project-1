@@ -200,7 +200,9 @@ var spliceJunk = function(){
 };
 
 // remove blaster and junk if their x/y values line up
-// was missing upper limit on blaster y value! 
+// was missing upper limit on blaster y value!
+// still getting error: "app.js:209 Uncaught TypeError: Cannot read property '1' of undefined(…)"
+// i think because blaster[i] gets spliced out, then the for loop is still checking for it somehow
 var goodAim = function(){
 	var remove = false;
 	for (var f = 0; f < junk.length; f++) {
