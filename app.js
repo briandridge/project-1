@@ -13,7 +13,7 @@ var leftPressed = false;
 var spacePressed = false;
 
 var blasterRadius = 10;
-var blasterTotal = 10;
+var blasterTotal = 4;
 var blasters = [];
 // blasterImg = new Image();
 // blasterImg.src = '../assets/blaster.png';
@@ -200,25 +200,30 @@ var spliceJunk = function(){
 };
 
 // remove blaster and junk if their x/y values line up
+// was missing upper limit on blaster y value! 
 var goodAim = function(){
 	var remove = false;
-	for (var i = 0; i < blasters.length; i++) {
-		for (var f = 0; f < junk.length; f++) {
-				 if (blasters[i][1] <= (junk[f][1] + junk[f][3]) && blasters[i][0] >= junk[f][0] && blasters[i][0] <= (junk[f][0] + junk[f][2])){
-				 	// if (blasterY <= junkY + junkHeight) && (blasterX >= junkX) && (blasterX <= junkX + junkWidth)
-				 	// if (blaster is lower than or touching junk's leading edge) && (blasterX left border is equal or right of JunkX's left border...) && (...blasterX left border is to the left of JunkX's right border)
+	for (var f = 0; f < junk.length; f++) {
+		for (var i = 0; i < blasters.length; i++) {
+		
+			if (blasters[i][1] >= (junk[f][1]) &&  
+				((blasters[i][1]) + blasterRadius) <= (junk[f][1] + junk[f][3]) && 
+				(blasters[i][0] >= junk[f][0]) && 
+				(blasters[i][0] <= (junk[f][0] + junk[f][2]))){
+				// if (blasterY <= junkY + junkHeight) && (blasterX >= junkX) && (blasterX <= junkX + junkWidth)
+				// if (blaster is lower than or touching junk's leading edge) && (blasterX left border is equal or right of JunkX's left border...) && (...blasterX left border is to the left of JunkX's right border)
 
-					// blaster and junk arrays for reference:
-					// blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
-					// junk.push([shipX, junkY, junkWidth, junkHeight]);
+				// blaster and junk arrays for reference:
+				// blasters.push([shipX +25, shipY -50, blasterRadius, 0, Math.PI*2]);
+				// junk.push([shipX, junkY, junkWidth, junkHeight]);
 
-					remove = true;
-					junk.splice(f,1);
-					counter ++;
-					console.log("goodAim: counter = " + counter);
-				}
-				if (remove === true) {
-				blasters.splice(i,1);
+				remove = true;
+				blasters.splice(f,1);
+				counter ++;
+				console.log("goodAim: counter = " + counter);
+			}
+			if (remove === true) {
+				junk.splice(i,1);
 				remove = false;
 			}
 		}
