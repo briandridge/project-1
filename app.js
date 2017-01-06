@@ -207,7 +207,7 @@ var goodAim = function(){
 	var remove = false;
 	for (var f = 0; f < junk.length; f++) {
 		for (var i = 0; i < blasters.length; i++) {
-		
+		// if junk[f] exists && collision
 			if (blasters[i][1] >= (junk[f][1]) &&  
 				((blasters[i][1]) + blasterRadius) <= (junk[f][1] + junk[f][3]) && 
 				(blasters[i][0] >= junk[f][0]) && 
